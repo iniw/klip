@@ -36,6 +36,33 @@
             ];
             packages = [ rust-toolchain ];
           };
+
+        packages = rec {
+          klip =
+            with pkgs;
+
+            rustPlatform.buildRustPackage {
+              name = "klip";
+              src = ./.;
+              cargoLock = {
+                lockFile = ./Cargo.lock;
+              };
+
+              meta = {
+                description = "A dead simple cross-platform tool to interact with the clipboard";
+                homepage = "https://github.com/iniw/klip";
+                license = [
+                  lib.licenses.bsd2
+                ];
+              };
+
+              buildInputs = lib.optionals stdenv.isDarwin [
+                darwin.apple_sdk.frameworks.AppKit
+              ];
+            };
+
+          default = klip;
+        };
       }
     );
 }
