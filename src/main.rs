@@ -1,20 +1,20 @@
 use std::io::{stdin, IsTerminal, Read};
 use std::{env, error::Error};
 
-use arboard::Clipboard;
+use cli_clipboard::{ClipboardContext, ClipboardProvider};
 
-fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
-    let mut clipboard = Clipboard::new()?;
+fn main() -> Result<(), Box<dyn Error>> {
+    let mut clipboard = ClipboardContext::new()?;
 
     match env::args().nth(1) {
-        Some(text) => clipboard.set_text(text)?,
+        Some(text) => clipboard.set_contents(text)?,
         None if !stdin().is_terminal() => {
             let mut input = String::new();
             stdin().read_to_string(&mut input)?;
-            clipboard.set_text(input)?;
+            clipboard.set_contents(input)?;
         }
         None => {
-            print!("{}", clipboard.get_text()?);
+            print!("{}", clipboard.get_contents()?);
         }
     };
 
