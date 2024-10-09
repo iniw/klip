@@ -26,15 +26,20 @@
             "rust-src"
           ];
         };
+        buildInputs =
+          with pkgs;
+          lib.optionals stdenv.isDarwin [
+            darwin.apple_sdk.frameworks.AppKit
+          ];
+
       in
       {
         devShells.default =
           with pkgs;
           mkShell {
-            buildInputs = lib.optionals stdenv.isDarwin [
-              darwin.apple_sdk.frameworks.AppKit
-            ];
             packages = [ rust-toolchain ];
+
+            inherit buildInputs;
           };
 
         packages = rec {
@@ -56,9 +61,7 @@
                 ];
               };
 
-              buildInputs = lib.optionals stdenv.isDarwin [
-                darwin.apple_sdk.frameworks.AppKit
-              ];
+              inherit buildInputs;
             };
 
           default = klip;
