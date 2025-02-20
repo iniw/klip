@@ -17,7 +17,7 @@
     }:
     {
       overlays.default = final: prev: {
-        klip = self.packages."${final.system}".klip;
+        inherit (self.packages."${final.system}") klip;
       };
     }
     // flake-utils.lib.eachDefaultSystem (
