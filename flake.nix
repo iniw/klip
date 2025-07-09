@@ -21,13 +21,20 @@
         pkgs = import nixpkgs { inherit system; };
       in
       {
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            cargo
+            rust-analyzer
+            rustc
+          ];
+        };
+
         packages = rec {
           klip = pkgs.rustPlatform.buildRustPackage {
             name = "klip";
-            src = ./.;
-            cargoLock = {
-              lockFile = ./Cargo.lock;
-            };
+            src = self;
+
+            cargoLock.lockFile = ./Cargo.lock;
 
             meta = {
               description = "A dead simple cross-platform tool to interact with the clipboard";
